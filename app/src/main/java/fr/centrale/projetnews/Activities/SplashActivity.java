@@ -1,6 +1,7 @@
 package fr.centrale.projetnews.Activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import fr.centrale.projetnews.ApplicationNews;
+import fr.centrale.projetnews.NewsApplication;
 import fr.centrale.projetnews.POJO.NewsArticle;
 import fr.centrale.projetnews.POJO.NewsSource;
 import fr.centrale.projetnews.POJO.ResArticle;
@@ -29,6 +30,9 @@ public class SplashActivity extends AppCompatActivity {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
+    private static String apiKey = "d31f5fa5f03443dd8a1b9e3fde92ec34";
+    private static String language = "fr";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +43,9 @@ public class SplashActivity extends AppCompatActivity {
 
     private void getSources(){
 
-        String url = "https://newsapi.org/v2/sources?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr";
+        String url = "https://newsapi.org/v2/sources" +
+                "?apiKey=" + apiKey +
+                "&language=" + language;
 
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -53,7 +59,7 @@ public class SplashActivity extends AppCompatActivity {
 
                             if(response.getStatus().equals("ok")){
                                 ArrayList<NewsSource> sources = response.getSources();
-                                ((ApplicationNews)getApplication()).setSources(sources);
+                                ((NewsApplication)getApplication()).setSources(sources);
 
                                 //Récupérer la source préférée ou prendre la première si elle n'existe pas.
                                 SharedPreferences pref = getPreferences(Activity.MODE_PRIVATE);
@@ -79,8 +85,12 @@ public class SplashActivity extends AppCompatActivity {
 
     private void getArticles(String sourceId){
 
-        String url = "https://newsapi.org/v2/everything?apiKey=d31f5fa5f03443dd8a1b9e3fde92ec34&language=fr&sources=" + sourceId;
+        String url = "https://newsapi.org/v2/everything" +
+                "?apiKey=" + apiKey +
+                "&language=" + language +
+                "&sources=" + sourceId;
 
+        Log.d(Consts.TAG, url);
         final ObjectMapper mapper = new ObjectMapper();
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -89,13 +99,18 @@ public class SplashActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(Object o) {
                         String json = (String)o;
+                        Log.d(Consts.TAG, json);
                         try {
                             ResArticle response = mapper.readValue(json, ResArticle.class);
                             if(response.getStatus().equals("ok")) {
                                 ArrayList<NewsArticle> articles = response.getArticles();
-                                ((ApplicationNews)getApplication()).setArticles(articles);
+                                ((NewsApplication)getApplication()).setArticles(articles);
 
 
+                                Log.d(Consts.TAG, "article: " + articles.size());
+
+                                Intent NewsIntent = new Intent(SplashActivity.this, NewsActivity.class);
+                                startActivity(NewsIntent);
                             }
                         } catch (IOException e) {
                             e.printStackTrace();

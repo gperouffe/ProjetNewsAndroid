@@ -12,7 +12,7 @@ import fr.centrale.projetnews.POJO.NewsSource;
 import fr.centrale.projetnews.POJO.ResArticle;
 import fr.centrale.projetnews.POJO.ResSources;
 
-public class ApplicationNews extends Application {
+public class NewsApplication extends Application {
 
     protected ArrayList<NewsArticle> articles;
     protected ArrayList<NewsSource> sources;
