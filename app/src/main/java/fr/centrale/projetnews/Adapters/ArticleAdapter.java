@@ -1,6 +1,5 @@
 package fr.centrale.projetnews.Adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,9 +41,9 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
         public ViewHolder(View itemView) {
             super(itemView);
-            title = itemView.findViewById(R.id.article_title);
-            date = itemView.findViewById(R.id.article_date);
-            author = itemView.findViewById(R.id.article_author);
+            title = itemView.findViewById(R.id.title);
+            date = itemView.findViewById(R.id.date);
+            author = itemView.findViewById(R.id.author);
         }
     }
 

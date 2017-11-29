@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -20,21 +19,21 @@
             tools:layout_editor_absoluteY="8dp">
 
             <TextView
-                android:id="@+id/article_title"
+                android:id="@+id/title"
                 style="@style/article_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Titre" />
 
             <TextView
-                android:id="@+id/article_author"
+                android:id="@+id/author"
                 style="@style/article_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Auteur" />
 
             <TextView
-                android:id="@+id/article_date"
+                android:id="@+id/date"
                 style="@style/article_item"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

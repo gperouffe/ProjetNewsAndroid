@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     style="@style/container"
-    tools:context="fr.centrale.projetnews.Fragments.ArticleFragment">
-
+    tools:context="fr.centrale.projetnews.Fragments.SourceFragment">
 
 </android.support.v7.widget.RecyclerView>

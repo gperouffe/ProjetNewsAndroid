@@ -26,7 +26,7 @@ import fr.centrale.projetnews.POJO.ResSources;
 import fr.centrale.projetnews.R;
 import fr.centrale.projetnews.Utils.Consts;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends     Activity {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
