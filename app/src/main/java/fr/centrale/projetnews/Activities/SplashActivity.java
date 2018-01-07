@@ -26,7 +26,7 @@ import fr.centrale.projetnews.POJO.ResSources;
 import fr.centrale.projetnews.R;
 import fr.centrale.projetnews.Utils.Consts;
 
-public class SplashActivity extends     Activity {
+public class SplashActivity extends Activity {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
@@ -38,7 +38,13 @@ public class SplashActivity extends     Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        getSources();
+        Intent intent = getIntent();
+        if(!intent.hasExtra("source")){
+            getSources();
+        }
+        else{
+            getArticles(intent.getStringExtra("source"));
+        }
     }
 
     private void getSources(){
@@ -92,6 +98,9 @@ public class SplashActivity extends     Activity {
 
         Log.d(Consts.TAG, url);
         final ObjectMapper mapper = new ObjectMapper();
+        SharedPreferences.Editor ed = getPreferences(Activity.MODE_PRIVATE).edit();
+        ed.putString(Consts.PREF_SOURCE, sourceId);
+        ed.commit();
 
         RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,

@@ -8,13 +8,18 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="article_item">
+    <style name="article_text">
         <item name="android:layout_marginBottom">8dp</item>
     </style>
 
+    <style name="card_margins">
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+    </style>
+
     <style name="container">
-        <item name="android:paddingRight">8dp</item>
-        <item name="android:paddingLeft">8dp</item>
         <item name="android:background">#DDDDDD</item>
     </style>
 

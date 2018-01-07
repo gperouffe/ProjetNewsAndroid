@@ -1,11 +1,13 @@
 package fr.centrale.projetnews.Adapters;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import fr.centrale.projetnews.Fragments.SourceFragment;
 import fr.centrale.projetnews.POJO.NewsArticle;
 import fr.centrale.projetnews.POJO.NewsSource;
 import fr.centrale.projetnews.R;
@@ -32,10 +35,12 @@ public class SourceAdapter extends RecyclerView.Adapter<SourceAdapter.ViewHolder
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
+        View view;
         TextView name;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            view = itemView;
             name = itemView.findViewById(R.id.name);
         }
     }
@@ -49,7 +54,16 @@ public class SourceAdapter extends RecyclerView.Adapter<SourceAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.name.setText(sources.get(position).getName());
+        final NewsSource source = sources.get(position);
+        holder.name.setText(source.getName());
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(Consts.TAG, "Loading articles for " + source.getName());
+                ((SourceFragment.OnFragmentInteractionListener)view.getContext()).onSourceFragmentInteraction(source.getId());
+
+            }
+        });
     }
 
     @Override

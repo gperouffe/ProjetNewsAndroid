@@ -1,6 +1,7 @@
 package fr.centrale.projetnews.Activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.support.annotation.Nullable;
@@ -62,10 +63,16 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
     public void onBackPressed() {
     }
 
+    @Override
+    public void onArticleFragmentInteraction(Uri uri) {
+
+    }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void onSourceFragmentInteraction(String sourceId) {
+        Intent intent = new Intent(NewsActivity.this, SplashActivity.class);
+        intent.putExtra("source", sourceId);
+        startActivity(intent);
     }
 
     @Override

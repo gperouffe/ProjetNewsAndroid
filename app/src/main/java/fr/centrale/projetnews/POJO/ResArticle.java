@@ -9,11 +9,14 @@ import java.util.ArrayList;
 public class ResArticle {
 
     private String status;
+
+
+    private Integer totalResults;
     private ArrayList<NewsArticle> articles;
 
     public ResArticle(){
         this.status = "";
-        this.articles = new ArrayList<NewsArticle>();
+        this.articles = new ArrayList<>();
     }
 
     public String getStatus() {
@@ -30,5 +33,13 @@ public class ResArticle {
 
     public void setArticles(ArrayList<NewsArticle> articles) {
         this.articles = articles;
+    }
+
+    public Integer getTotalResults() {
+        return totalResults;
+    }
+
+    public void setTotalResults(Integer totalResults) {
+        this.totalResults = totalResults;
     }
 }
