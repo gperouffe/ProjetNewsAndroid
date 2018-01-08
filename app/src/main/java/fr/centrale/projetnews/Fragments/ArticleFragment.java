@@ -29,6 +29,7 @@ import fr.centrale.projetnews.R;
 public class ArticleFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private Context context;
 
     public ArticleFragment() {
         // Required empty public constructor
@@ -60,13 +61,14 @@ public class ArticleFragment extends Fragment {
 
         ArrayList<NewsArticle> articles = ((NewsApplication) getActivity().getApplication()).getArticles();
 
-        rv.setAdapter(new ArticleAdapter(articles));
+        rv.setAdapter(new ArticleAdapter(articles, context));
 
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        this.context = context;
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {

@@ -1,11 +1,15 @@
 package fr.centrale.projetnews.Adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
+import com.android.volley.toolbox.Volley;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -16,7 +20,7 @@ import java.util.Locale;
 
 import fr.centrale.projetnews.POJO.NewsArticle;
 import fr.centrale.projetnews.R;
-import fr.centrale.projetnews.Utils.Consts;
+import fr.centrale.projetnews.Utils.CustomLruCache;
 
 /**
  * Created by Guillaume on 23/11/2017.
@@ -28,9 +32,10 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     private SimpleDateFormat dateParse = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
     private DateFormat toLocaleDate = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE);
     private DateFormat toLocaleTime = DateFormat.getTimeInstance( DateFormat.SHORT, Locale.FRANCE);
+    private ImageLoader imageLoader;
 
-    public ArticleAdapter(ArrayList<NewsArticle> articles) {
-        Log.d(Consts.TAG, articles.size() + "");
+    public ArticleAdapter(ArrayList<NewsArticle> articles, Context context) {
+        imageLoader = new ImageLoader(CustomLruCache.newRequestQueue(context), new CustomLruCache());
         this.articles = articles;
     }
 
@@ -38,12 +43,15 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
         TextView title;
         TextView date;
         TextView author;
+        NetworkImageView imView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.title);
             date = itemView.findViewById(R.id.date);
             author = itemView.findViewById(R.id.author);
+            imView = itemView.findViewById(R.id.imViewAtricle);
+
         }
     }
 
@@ -56,15 +64,23 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.title.setText(articles.get(position).getTitle());
+        NewsArticle article = articles.get(position);
+        holder.title.setText(article.getTitle());
+
+        holder.imView.setImageUrl(article.getUrlToImage(), imageLoader);
 
         try {
-            Date published = dateParse.parse(articles.get(position).getPublishedAt());
+            Date published = dateParse.parse(article.getPublishedAt());
             holder.date.setText("Publié le " + toLocaleDate.format(published) + " à " + toLocaleTime.format(published));
         } catch (ParseException e) {
             e.printStackTrace();
         }
         holder.author.setText(articles.get(position).getAuthor());
+    }
+
+    @Override
+    public void onViewRecycled(ViewHolder holder) {
+        super.onViewRecycled(holder);
     }
 
     @Override

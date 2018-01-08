@@ -9,8 +9,6 @@ import java.util.ArrayList;
 public class ResArticle {
 
     private String status;
-
-
     private Integer totalResults;
     private ArrayList<NewsArticle> articles;
 

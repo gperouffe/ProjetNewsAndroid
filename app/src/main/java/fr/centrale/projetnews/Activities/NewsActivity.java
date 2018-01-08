@@ -72,7 +72,7 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
     public void onSourceFragmentInteraction(String sourceId) {
         Intent intent = new Intent(NewsActivity.this, SplashActivity.class);
         intent.putExtra("source", sourceId);
-        startActivity(intent);
+        startActivity(intent)  ;
     }
 
     @Override
