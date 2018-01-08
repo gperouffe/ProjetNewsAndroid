@@ -82,7 +82,7 @@ public class SplashActivity extends Activity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e(Consts.TAG, error.getMessage());
+                        Log.e(Consts.TAG, "Error: " + error.getMessage());
                     }
                 }
         );
