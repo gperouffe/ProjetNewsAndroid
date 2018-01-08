@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-import com.android.volley.toolbox.Volley;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -98,7 +97,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
     @Override
     public ArticleAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_article, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.article_item, parent, false);
         ViewHolder vh = new ViewHolder(v);
         return vh;
     }
@@ -111,11 +110,14 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             Date published = dateParse.parse(article.getPublishedAt());
             String date = res.getString(R.string.publish_date, toLocaleDate.format(published), toLocaleTime.format(published));
 
+            String author = article.getAuthor();
+            author = author==null? res.getString(R.string.anonymous): author;
+
             holder.setContentWithPosition(
                     position,
                     article.getTitle(),
                     date,
-                    article.getAuthor(),
+                    author,
                     article.getUrlToImage(),
                     imageLoader);
 

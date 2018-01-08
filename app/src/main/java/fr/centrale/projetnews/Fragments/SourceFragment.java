@@ -1,7 +1,6 @@
 package fr.centrale.projetnews.Fragments;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,10 +12,8 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-import fr.centrale.projetnews.Adapters.ArticleAdapter;
 import fr.centrale.projetnews.Adapters.SourceAdapter;
 import fr.centrale.projetnews.NewsApplication;
-import fr.centrale.projetnews.POJO.NewsArticle;
 import fr.centrale.projetnews.POJO.NewsSource;
 import fr.centrale.projetnews.R;
 
@@ -50,7 +47,7 @@ public class SourceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_source, container, false);
+        return inflater.inflate(R.layout.source_fragment, container, false);
     }
 
     @Override
