@@ -38,6 +38,7 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
+
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.articles, ArticleFragment.newInstance())
                 .commit();
@@ -64,8 +65,10 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
     }
 
     @Override
-    public void onArticleFragmentInteraction(Uri uri) {
-
+    public void onArticleFragmentInteraction(int articleId) {
+        Intent intent = new Intent(NewsActivity.this, DetailsActivity.class);
+        intent.putExtra("article", articleId);
+        startActivity(intent)  ;
     }
 
     @Override

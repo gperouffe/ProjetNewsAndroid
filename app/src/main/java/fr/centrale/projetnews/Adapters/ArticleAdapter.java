@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import fr.centrale.projetnews.Fragments.ArticleFragment;
 import fr.centrale.projetnews.POJO.NewsArticle;
 import fr.centrale.projetnews.R;
 import fr.centrale.projetnews.Utils.CustomLruCache;
@@ -42,6 +43,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
+        View view;
+
         View evenView;
         View oddView;
 
@@ -57,6 +60,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
 
         public ViewHolder(View itemView) {
             super(itemView);
+            view = itemView;
+
             evenView = itemView.findViewById(R.id.even_item);
             oddView = itemView.findViewById(R.id.odd_item);
 
@@ -103,7 +108,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         NewsArticle article = articles.get(position);
         try {
             Resources res = context.getResources();
@@ -120,6 +125,13 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
                     author,
                     article.getUrlToImage(),
                     imageLoader);
+
+            holder.view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((ArticleFragment.OnFragmentInteractionListener) view.getContext()).onArticleFragmentInteraction(position);
+                }
+            });
 
         } catch (ParseException e) {
             e.printStackTrace();

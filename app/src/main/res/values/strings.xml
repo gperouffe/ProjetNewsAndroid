@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">News</string>
+    <string name="app_name">Niouz</string>
 
     <string name="open_drawer">Ouvrir les sources</string>
     <string name="close_drawer">Fermer les sources</string>
@@ -8,4 +8,5 @@
     <string name="publish_date">Le %1$s à %2$s</string>
 
     <string name="choose_source">Sources</string>
+    <string name="title_activity_details">DetailsActivity</string>
 </resources>
