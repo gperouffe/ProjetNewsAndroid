@@ -31,10 +31,24 @@
             android:layout_height="wrap_content" />
     </ScrollView>
 
+    <TextView
+        android:id="@+id/source"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_gravity="bottom|end"
+        android:gravity="center"
+        android:paddingEnd="12dp"
+        android:paddingStart="12dp"
+        android:background="@color/colorAccent"
+        android:layout_marginBottom="32dp"
+        android:layout_marginEnd="65dp"
+        android:textColor="#FFFFFF"
+        android:text="source"/>
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_open_in_new_24dp" />

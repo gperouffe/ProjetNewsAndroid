@@ -22,7 +22,6 @@ import fr.centrale.projetnews.Fragments.ArticleFragment;
 import fr.centrale.projetnews.NewsApplication;
 import fr.centrale.projetnews.POJO.NewsArticle;
 import fr.centrale.projetnews.R;
-import fr.centrale.projetnews.Utils.CustomLruCache;
 
 /**
  * Created by Guillaume on 23/11/2017.
@@ -70,11 +69,15 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
             date_e = evenView.findViewById(R.id.date);
             author_e = evenView.findViewById(R.id.author);
             imView_e = evenView.findViewById(R.id.imViewAtricle);
+            imView_e.setDefaultImageResId(R.drawable.ic_book_24dp);
+            imView_e.setErrorImageResId(R.drawable.ic_book_24dp);
 
             title_o = oddView.findViewById(R.id.title);
             date_o = oddView.findViewById(R.id.date);
             author_o = oddView.findViewById(R.id.author);
             imView_o = oddView.findViewById(R.id.imViewAtricle);
+            imView_o.setDefaultImageResId(R.drawable.ic_book_24dp);
+            imView_o.setErrorImageResId(R.drawable.ic_book_24dp);
         }
 
         public void setContentWithPosition(int position, String title, String date, String author, String imgUrl, ImageLoader imgLoader){

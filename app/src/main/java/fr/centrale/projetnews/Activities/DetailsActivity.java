@@ -63,8 +63,15 @@ public class DetailsActivity extends AppCompatActivity {
         }
         ((TextView) findViewById(R.id.author_date)).setText(author_date);
 
-        ((NetworkImageView) findViewById(R.id.image)).setImageUrl(article.getUrlToImage(), appli.getImageLoader());
+        ((TextView) findViewById(R.id.source)).setText(res.getString(R.string.read_on, article.getSource().getName()));
 
+        NetworkImageView imageView = findViewById(R.id.image);
+        if(article.getUrlToImage() != null) {
+            imageView.setImageUrl(article.getUrlToImage(), appli.getImageLoader());
+        }
+        else{
+            imageView.setVisibility(View.GONE);
+        }
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

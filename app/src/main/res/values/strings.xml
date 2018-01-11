@@ -13,5 +13,6 @@
     <string name="title_activity_web">Lecture</string>
 
     <string name="author_date">Par %1$s, le  %2$s à %3$s</string>
+    <string name="read_on">Lire sur %1$s</string>
 
 </resources>
