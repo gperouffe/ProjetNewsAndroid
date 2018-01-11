@@ -12,4 +12,6 @@
     <string name="title_activity_details">Détails</string>
     <string name="title_activity_web">Lecture</string>
 
+    <string name="author_date">Par %1$s, le  %2$s à %3$s</string>
+
 </resources>

@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import fr.centrale.projetnews.Fragments.ArticleFragment;
+import fr.centrale.projetnews.NewsApplication;
 import fr.centrale.projetnews.POJO.NewsArticle;
 import fr.centrale.projetnews.R;
 import fr.centrale.projetnews.Utils.CustomLruCache;
@@ -37,7 +38,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     private Context context;
 
     public ArticleAdapter(ArrayList<NewsArticle> articles, Context context) {
-        imageLoader = new ImageLoader(CustomLruCache.newRequestQueue(context), new CustomLruCache());
+        imageLoader = ((NewsApplication)context.getApplicationContext()).getImageLoader();
         this.context = context;
         this.articles = articles;
     }
