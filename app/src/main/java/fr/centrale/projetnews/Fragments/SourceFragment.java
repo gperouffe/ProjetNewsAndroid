@@ -28,6 +28,7 @@ import fr.centrale.projetnews.R;
 public class SourceFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private SourceAdapter sourceAdapter;
 
     public SourceFragment() {
         // Required empty public constructor
@@ -60,7 +61,8 @@ public class SourceFragment extends Fragment {
 
         ArrayList<NewsSource> sources = ((NewsApplication) getActivity().getApplication()).getSources();
 
-        rv.setAdapter(new SourceAdapter(sources));
+        sourceAdapter = new SourceAdapter(sources);
+        rv.setAdapter(sourceAdapter);
     }
 
     @Override
@@ -80,17 +82,12 @@ public class SourceFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         void onSourceFragmentInteraction(String sourceId);
+    }
+
+    public void notifyDataSetChanged(){
+        if(sourceAdapter != null)
+            sourceAdapter.notifyDataSetChanged();
     }
 }

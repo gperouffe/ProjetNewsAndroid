@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
+import fr.centrale.projetnews.Activities.NewsActivity;
 import fr.centrale.projetnews.Adapters.ArticleAdapter;
 import fr.centrale.projetnews.NewsApplication;
 import fr.centrale.projetnews.POJO.NewsArticle;
@@ -29,7 +30,7 @@ import fr.centrale.projetnews.R;
 public class ArticleFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
-    private Context context;
+    private ArticleAdapter articleAdapter;
 
     public ArticleFragment() {
         // Required empty public constructor
@@ -61,14 +62,14 @@ public class ArticleFragment extends Fragment {
 
         ArrayList<NewsArticle> articles = ((NewsApplication) getActivity().getApplication()).getArticles();
 
-        rv.setAdapter(new ArticleAdapter(articles, context));
-
+        articleAdapter = new ArticleAdapter(articles, getContext(), rv);
+        rv.setAdapter(articleAdapter);
+        ((NewsActivity)getContext()).getArticles();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        this.context = context;
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {
@@ -83,17 +84,11 @@ public class ArticleFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         void onArticleFragmentInteraction(int articleId);
+    }
+
+    public ArticleAdapter getArticleAdapter() {
+        return articleAdapter;
     }
 }

@@ -23,6 +23,8 @@ public class NewsApplication extends Application {
     protected ImageLoader imageLoader;
 
     public NewsApplication(){
+        articles = new ArrayList<>();
+        sources = new ArrayList<>();
     }
 
     @Override

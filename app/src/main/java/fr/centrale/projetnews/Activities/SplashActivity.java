@@ -30,28 +30,19 @@ public class SplashActivity extends Activity {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    private static String apiKey = "d31f5fa5f03443dd8a1b9e3fde92ec34";
-    private static String language = "fr";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        Intent intent = getIntent();
-        if(!intent.hasExtra("source")){
-            getSources();
-        }
-        else{
-            getArticles(intent.getStringExtra("source"));
-        }
+        getSources();
     }
 
     private void getSources(){
 
         String url = "https://newsapi.org/v2/sources" +
-                "?apiKey=" + apiKey +
-                "&language=" + language;
+                "?apiKey=" + Consts.API_KEY +
+                "&language=" + Consts.API_LANG;
 
 
         RequestQueue queue = Volley.newRequestQueue(this);
@@ -67,64 +58,12 @@ public class SplashActivity extends Activity {
                                 ArrayList<NewsSource> sources = response.getSources();
                                 ((NewsApplication)getApplication()).setSources(sources);
 
-                                //Récupérer la source préférée ou prendre la première si elle n'existe pas.
-                                SharedPreferences pref = getPreferences(Activity.MODE_PRIVATE);
-                                String sourceId = pref.getString(Consts.PREF_SOURCE, sources.get(0).getId());
-
-                                //Récupération des articles
-                                getArticles(sourceId);
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e(Consts.TAG, "Error: " + error.getMessage());
-                    }
-                }
-        );
-        queue.add(stringRequest);
-    }
-
-    private void getArticles(String sourceId){
-
-        String url = "https://newsapi.org/v2/everything" +
-                "?apiKey=" + apiKey +
-                "&language=" + language +
-                "&sources=" + sourceId;
-
-        Log.d(Consts.TAG, url);
-        final ObjectMapper mapper = new ObjectMapper();
-        SharedPreferences.Editor ed = getPreferences(Activity.MODE_PRIVATE).edit();
-        ed.putString(Consts.PREF_SOURCE, sourceId);
-        ed.commit();
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                new Response.Listener() {
-                    @Override
-                    public void onResponse(Object o) {
-                        String json = (String)o;
-                        Log.d(Consts.TAG, json);
-                        try {
-                            ResArticle response = mapper.readValue(json, ResArticle.class);
-                            if(response.getStatus().equals("ok")) {
-                                ArrayList<NewsArticle> articles = response.getArticles();
-                                ((NewsApplication)getApplication()).setArticles(articles);
-
-
-                                Log.d(Consts.TAG, "article: " + articles.size());
-
                                 Intent NewsIntent = new Intent(SplashActivity.this, NewsActivity.class);
                                 startActivity(NewsIntent);
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-
                     }
                 },
                 new Response.ErrorListener() {

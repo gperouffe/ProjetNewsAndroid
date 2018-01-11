@@ -1,5 +1,9 @@
 package fr.centrale.projetnews.Adapters;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import fr.centrale.projetnews.Activities.NewsActivity;
 import fr.centrale.projetnews.Fragments.SourceFragment;
 import fr.centrale.projetnews.POJO.NewsSource;
 import fr.centrale.projetnews.R;
@@ -53,9 +58,15 @@ public class SourceAdapter extends RecyclerView.Adapter<SourceAdapter.ViewHolder
             public void onClick(View view) {
                 Log.d(Consts.TAG, "Loading articles for " + source.getName());
                 ((SourceFragment.OnFragmentInteractionListener)view.getContext()).onSourceFragmentInteraction(source.getId());
-
             }
         });
+
+        if(source.isSelected()){
+            holder.view.setBackgroundColor(Color.parseColor("#DDDDDD"));
+        }
+        else{
+            holder.view.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        }
     }
 
     @Override

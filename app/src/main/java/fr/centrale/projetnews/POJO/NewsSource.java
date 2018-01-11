@@ -13,6 +13,8 @@ public class NewsSource {
     private String language;
     private String country;
 
+    private boolean selected = false;
+
     public NewsSource(){
         this.id = "";
         this.name = "";
@@ -77,6 +79,14 @@ public class NewsSource {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
     }
 
 }

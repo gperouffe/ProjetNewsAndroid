@@ -2,6 +2,7 @@ package fr.centrale.projetnews.Adapters;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +28,7 @@ import fr.centrale.projetnews.R;
  * Created by Guillaume on 23/11/2017.
  */
 
-public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHolder> implements View.OnClickListener{
+public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener{
 
     private ArrayList<NewsArticle> articles;
     private SimpleDateFormat dateParse = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
@@ -35,115 +36,138 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     private DateFormat toLocaleTime = new SimpleDateFormat("HH'h'mm");
     private ImageLoader imageLoader;
     private Context context;
+    private RecyclerView rv;
 
-    public ArticleAdapter(ArrayList<NewsArticle> articles, Context context) {
-        imageLoader = ((NewsApplication)context.getApplicationContext()).getImageLoader();
-        this.context = context;
-        this.articles = articles;
+    private final int VIEW_ITEM_EVEN = 0;
+    private final int VIEW_ITEM_ODD = 1;
+    private final int VIEW_LOADING = 2;
+
+    private int visibleThreshold = 5;
+    private int lastVisibleItem, totalItemCount;
+
+    private boolean loading;
+
+    public interface OnLoadMoreListener {
+        void onLoadMore();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public ArticleAdapter(ArrayList<NewsArticle> articles, final Context context, RecyclerView rv) {
+        imageLoader = ((NewsApplication) context.getApplicationContext()).getImageLoader();
+        this.context = context;
+        this.articles = articles;
+        this.rv = rv;
+
+
+        rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                totalItemCount = linearLayoutManager.getItemCount();
+                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold) && lastVisibleItem > visibleThreshold) {
+                    loading = true;
+                    recyclerView.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            ((OnLoadMoreListener) context).onLoadMore();
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    public static class ArticleViewHolder extends RecyclerView.ViewHolder{
         View view;
 
-        View evenView;
-        View oddView;
+        private TextView title;
+        private TextView date;
+        private TextView author;
+        private NetworkImageView imView;
 
-        TextView title_e;
-        TextView date_e;
-        TextView author_e;
-        NetworkImageView imView_e;
-
-        TextView title_o;
-        TextView date_o;
-        TextView author_o;
-        NetworkImageView imView_o;
-
-        public ViewHolder(View itemView) {
+        public ArticleViewHolder(View itemView) {
             super(itemView);
             view = itemView;
 
-            evenView = itemView.findViewById(R.id.even_item);
-            oddView = itemView.findViewById(R.id.odd_item);
-
-            title_e = evenView.findViewById(R.id.title);
-            date_e = evenView.findViewById(R.id.date);
-            author_e = evenView.findViewById(R.id.author);
-            imView_e = evenView.findViewById(R.id.imViewAtricle);
-            imView_e.setDefaultImageResId(R.drawable.ic_book_24dp);
-            imView_e.setErrorImageResId(R.drawable.ic_book_24dp);
-
-            title_o = oddView.findViewById(R.id.title);
-            date_o = oddView.findViewById(R.id.date);
-            author_o = oddView.findViewById(R.id.author);
-            imView_o = oddView.findViewById(R.id.imViewAtricle);
-            imView_o.setDefaultImageResId(R.drawable.ic_book_24dp);
-            imView_o.setErrorImageResId(R.drawable.ic_book_24dp);
+            title = view.findViewById(R.id.title);
+            date = view.findViewById(R.id.date);
+            author = view.findViewById(R.id.author);
+            imView = view.findViewById(R.id.imViewAtricle);
+            imView.setDefaultImageResId(R.drawable.ic_book_24dp);
+            imView.setErrorImageResId(R.drawable.ic_book_24dp);
         }
 
-        public void setContentWithPosition(int position, String title, String date, String author, String imgUrl, ImageLoader imgLoader){
-            if(position % 2 == 0){
-                oddView.setVisibility(View.GONE);
+        public void setContent(String title, String date, String author, String imgUrl, ImageLoader imgLoader){
+            this.title.setText(title);
+            this.date.setText(date);
+            this.author.setText(author);
+            this.imView.setImageUrl(imgUrl, imgLoader);
+        }
+    }
 
-                title_e.setText(title);
-                date_e.setText(date);
-                author_e.setText(author);
-                imView_e.setImageUrl(imgUrl, imgLoader);
+    public static class LoadingViewHolder extends RecyclerView.ViewHolder{
 
-                evenView.setVisibility(View.VISIBLE);
-            }
-            else{
-                evenView.setVisibility(View.GONE);
-
-                title_o.setText(title);
-                date_o.setText(date);
-                author_o.setText(author);
-                imView_o.setImageUrl(imgUrl, imgLoader);
-
-                oddView.setVisibility(View.VISIBLE);
-            }
+        public LoadingViewHolder(View itemView) {
+            super(itemView);
         }
     }
 
     @Override
-    public ArticleAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.article_item, parent, false);
-        ViewHolder vh = new ViewHolder(v);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v;
+        RecyclerView.ViewHolder vh;
+        switch (viewType){
+            case VIEW_ITEM_EVEN:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.article_item_even, parent, false);
+                vh = new ArticleViewHolder(v);
+                break;
+            case VIEW_ITEM_ODD:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.article_item_odd, parent, false);
+                vh = new ArticleViewHolder(v);
+                break;
+            default:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.article_loading, parent, false);
+                vh = new LoadingViewHolder(v);
+        }
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position) {
-        NewsArticle article = articles.get(position);
-        try {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+        if(holder instanceof ArticleViewHolder){
+            ArticleViewHolder holderCast = (ArticleViewHolder) holder;
+            NewsArticle article = articles.get(position);
             Resources res = context.getResources();
-            Date published = dateParse.parse(article.getPublishedAt());
+            Date published = new Date();
+            try {
+                published = dateParse.parse(article.getPublishedAt());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             String date = res.getString(R.string.publish_date, toLocaleDate.format(published), toLocaleTime.format(published));
-
             String author = article.getAuthor();
             author = author==null? res.getString(R.string.anonymous): author;
 
-            holder.setContentWithPosition(
-                    position,
+            holderCast.setContent(
                     article.getTitle(),
                     date,
                     author,
                     article.getUrlToImage(),
                     imageLoader);
 
-            holder.view.setOnClickListener(new View.OnClickListener() {
+            holderCast.view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     ((ArticleFragment.OnFragmentInteractionListener) view.getContext()).onArticleFragmentInteraction(position);
                 }
             });
-
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
     }
 
     @Override
-    public void onViewRecycled(ViewHolder holder) {
+    public void onViewRecycled(RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
     }
 
@@ -155,5 +179,15 @@ public class ArticleAdapter extends RecyclerView.Adapter<ArticleAdapter.ViewHold
     @Override
     public void onClick(View view) {
 
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return articles.get(position) != null? position%2: VIEW_LOADING;
+    }
+
+
+    public void loadEnd() {
+        this.loading = false;
     }
 }
