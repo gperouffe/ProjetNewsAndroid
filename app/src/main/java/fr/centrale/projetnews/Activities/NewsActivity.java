@@ -1,9 +1,11 @@
 package fr.centrale.projetnews.Activities;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
@@ -64,6 +66,7 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
         for(NewsSource source: sources){
             source.setSelected(source.getId().equals(currentSourceId));
         }
+        setTitleWithSource();
 
         drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer, R.string.close_drawer);
@@ -110,19 +113,19 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
     @Override
     public void onSourceFragmentInteraction(String sourceId) {
         if(!currentSourceId.equals(sourceId)){
+            currentSourceId = sourceId;
+            setTitleWithSource();
             drawerLayout.closeDrawer(Gravity.LEFT);
-            page = 1;
 
             for(NewsSource source: sources){
                 source.setSelected(source.getId().equals(sourceId));
             }
             sourceFragment.notifyDataSetChanged();
 
-            currentSourceId = sourceId;
             SharedPreferences.Editor ed = getPreferences(Activity.MODE_PRIVATE).edit();
             ed.putString(Consts.PREF_SOURCE, sourceId);
             ed.commit();
-            getArticles();
+            getArticlesFromStart();
         }
 
     }
@@ -139,6 +142,10 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
     public void onLoadMore() {
         page++;
         this.getArticles();
+    }
+    public void getArticlesFromStart(){
+        page = 1;
+        getArticles();
     }
     public void getArticles(){
 
@@ -201,10 +208,45 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        articles.remove(articles.size()-1);
+                        if(adapter != null){
+                            adapter.notifyItemRemoved(articles.size());
+                        }
+                        networkFailureDialog();
                         Log.e(Consts.TAG, "Error: " + error.getMessage());
                     }
                 }
         );
         queue.add(stringRequest);
+    }
+
+    public void networkFailureDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.network_err_title)
+            .setMessage(R.string.network_err_msg)
+            .setPositiveButton(R.string.network_err_retry, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    getArticles();
+                }
+            })
+            .setNegativeButton(R.string.network_err_later, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+
+                }
+            });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void setTitleWithSource(){
+        NewsSource source = new NewsSource();
+        for(NewsSource src : sources){
+            if (src.getId().equals(currentSourceId))
+                source = src;
+        }
+        Resources res = getApplicationContext().getResources();
+        setTitle(res.getString(R.string.app_name) + " - " + source.getName());
     }
 }

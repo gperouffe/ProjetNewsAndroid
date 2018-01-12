@@ -15,4 +15,9 @@
     <string name="author_date">Par %1$s, le  %2$s à %3$s</string>
     <string name="read_on">Lire sur %1$s</string>
 
+    <string name="network_err_title">Erreur réseau</string>
+    <string name="network_err_msg">Un problème est survenu lors de la connexion au réseau. Veuillez réessayer.</string>
+    <string name="network_err_retry">Réessayer</string>
+    <string name="network_err_later">Plus tard</string>
+    <string name="network_err_quit">Quitter</string>
 </resources>

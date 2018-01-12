@@ -1,8 +1,10 @@
 package fr.centrale.projetnews.Activities;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -34,7 +36,9 @@ public class SplashActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-
+        if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean("EXIT", false)) {
+            finishAndRemoveTask();
+        }
         getSources();
     }
 
@@ -69,10 +73,32 @@ public class SplashActivity extends Activity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        networkFailureDialog();
                         Log.e(Consts.TAG, "Error: " + error.getMessage());
                     }
                 }
         );
         queue.add(stringRequest);
+    }
+
+
+    public void networkFailureDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.network_err_title)
+                .setMessage(R.string.network_err_msg)
+                .setPositiveButton(R.string.network_err_retry, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        getSources();
+                    }
+                })
+                .setNegativeButton(R.string.network_err_quit, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finishAndRemoveTask();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }

@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -65,6 +66,15 @@ public class ArticleFragment extends Fragment {
         articleAdapter = new ArticleAdapter(articles, getContext(), rv);
         rv.setAdapter(articleAdapter);
         ((NewsActivity)getContext()).getArticles();
+
+        final SwipeRefreshLayout swipeRefresh = view.findViewById(R.id.swipe_refresh);
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefresh.setRefreshing(false);
+                ((NewsActivity) getContext()).getArticlesFromStart();
+            }
+        });
     }
 
     @Override

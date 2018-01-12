@@ -75,6 +75,9 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         }
                     });
                 }
+                else if (totalItemCount - 1 > (lastVisibleItem + visibleThreshold)){
+                    loading = false;
+                }
             }
         });
     }
