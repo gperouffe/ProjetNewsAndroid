@@ -8,6 +8,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -31,15 +33,21 @@ import fr.centrale.projetnews.Utils.Consts;
 public class SplashActivity extends Activity {
 
     private final ObjectMapper mapper = new ObjectMapper();
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        if (getIntent().getExtras() != null && getIntent().getExtras().getBoolean("EXIT", false)) {
+
+        progressBar = findViewById(R.id.progressBar);
+
+        if (getIntent().getExtras() != null && getIntent().hasExtra(Consts.EXIT_APP)) {
             finishAndRemoveTask();
         }
-        getSources();
+        else{
+            getSources();
+        }
     }
 
     private void getSources(){
@@ -48,12 +56,14 @@ public class SplashActivity extends Activity {
                 "?apiKey=" + Consts.API_KEY +
                 "&language=" + Consts.API_LANG;
 
+        progressBar.setVisibility(View.VISIBLE);
 
         RequestQueue queue = Volley.newRequestQueue(this);
         StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener() {
                     @Override
                     public void onResponse(Object o) {
+                        progressBar.setVisibility(View.INVISIBLE);
                         String json = (String)o;
                         try {
                             ResSources response = mapper.readValue(json, ResSources.class);
@@ -64,6 +74,7 @@ public class SplashActivity extends Activity {
 
                                 Intent NewsIntent = new Intent(SplashActivity.this, NewsActivity.class);
                                 startActivity(NewsIntent);
+                                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
@@ -73,6 +84,7 @@ public class SplashActivity extends Activity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        progressBar.setVisibility(View.INVISIBLE);
                         networkFailureDialog();
                         Log.e(Consts.TAG, "Error: " + error.getMessage());
                     }

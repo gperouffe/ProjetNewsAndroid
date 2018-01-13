@@ -20,4 +20,6 @@
     <string name="network_err_retry">Réessayer</string>
     <string name="network_err_later">Plus tard</string>
     <string name="network_err_quit">Quitter</string>
+
+    <string name="press_back_twice">Appuyez une seconde fois pour quitter.  </string>
 </resources>

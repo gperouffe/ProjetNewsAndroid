@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -50,6 +52,8 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
     private SourceFragment sourceFragment;
     private String currentSourceId;
     private int page = 1;
+
+    private boolean backClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +105,26 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
 
     @Override
     public void onBackPressed() {
+        if (backClicked) {
+            Intent intent = new Intent(NewsActivity.this, SplashActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(Consts.EXIT_APP, true);
+            startActivity(intent);
+            return;
+        }
+
+        backClicked = true;
+        Resources res = getApplicationContext().getResources();
+        Toast.makeText(this, res.getString(R.string.press_back_twice) , Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                backClicked=false;
+            }
+        }, 2000);
+
     }
 
     @Override
@@ -249,4 +273,6 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
         Resources res = getApplicationContext().getResources();
         setTitle(res.getString(R.string.app_name) + " - " + source.getName());
     }
+
+
 }

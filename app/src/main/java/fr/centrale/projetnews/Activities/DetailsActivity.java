@@ -79,6 +79,7 @@ public class DetailsActivity extends AppCompatActivity {
                 Intent intent = new Intent(DetailsActivity.this, WebActivity.class);
                 intent.putExtra("url", article.getUrl());
                 startActivity(intent) ;
+                overridePendingTransition(R.anim.slide_in, R.anim.still);
             }
         });
     }

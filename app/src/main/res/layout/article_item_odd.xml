@@ -11,7 +11,7 @@
             android:layout_height="wrap_content"
             android:padding="6dp">
 
-        <com.android.volley.toolbox.NetworkImageView
+        <fr.centrale.projetnews.Utils.FadeInNetworkImageView
             android:id="@+id/imViewAtricle"
             android:layout_width="88dp"
             android:layout_height="0dp"
@@ -20,9 +20,7 @@
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" >
-
-        </com.android.volley.toolbox.NetworkImageView>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/imageView"

@@ -11,4 +11,5 @@ public class Consts {
 
     public static final String TAG = "ProjetNews";
     public static final String PREF_SOURCE = "source";
+    public static final String EXIT_APP = "EXIT";
 }

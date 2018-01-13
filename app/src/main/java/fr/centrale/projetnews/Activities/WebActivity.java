@@ -46,6 +46,7 @@ public class WebActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_web);
 
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_close);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setTitle(R.string.title_activity_web);
@@ -65,6 +66,13 @@ public class WebActivity extends AppCompatActivity {
     @Override
     public boolean onSupportNavigateUp() {
         finish();
+        overridePendingTransition(R.anim.still, R.anim.slide_out);
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.still, R.anim.slide_out);
     }
 }
