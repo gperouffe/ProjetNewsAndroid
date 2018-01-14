@@ -56,7 +56,6 @@ public class SourceAdapter extends RecyclerView.Adapter<SourceAdapter.ViewHolder
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(Consts.TAG, "Loading articles for " + source.getName());
                 ((SourceFragment.OnFragmentInteractionListener)view.getContext()).onSourceFragmentInteraction(source.getId());
             }
         });

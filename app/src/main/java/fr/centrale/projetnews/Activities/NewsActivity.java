@@ -85,7 +85,6 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
         articleFragment = (ArticleFragment) fm.findFragmentById(R.id.articles);
 
         if(articleFragment == null){
-            Log.d(Consts.TAG, "nouveau fragment");
             articleFragment = ArticleFragment.newInstance();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.articles, articleFragment)
@@ -283,7 +282,6 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
     @Override
     public void onPause(){
         if(isFinishing()) {
-            Log.d(Consts.TAG, "get rid of fragment");
             FragmentManager fm = getSupportFragmentManager();
             fm.beginTransaction().remove(articleFragment).commit();
         }

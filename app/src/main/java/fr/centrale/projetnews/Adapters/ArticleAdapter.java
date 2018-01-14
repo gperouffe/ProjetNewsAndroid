@@ -69,7 +69,6 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 totalItemCount = linearLayoutManager.getItemCount();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
                 if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold) && totalItemCount > 1) {
-                    Log.d(Consts.TAG,  "trigger onloadmore");
                     loading = true;
                     recyclerView.post(new Runnable() {
                         @Override
@@ -79,7 +78,6 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                     });
                 }
                 else if (loading && totalItemCount - 1 > (lastVisibleItem + visibleThreshold)){
-                    Log.d(Consts.TAG, "remonté");
                     loading = false;
                 }
             }
