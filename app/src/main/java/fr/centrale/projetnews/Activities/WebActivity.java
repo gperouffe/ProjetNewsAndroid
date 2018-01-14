@@ -14,6 +14,8 @@ import fr.centrale.projetnews.R;
 
 public class WebActivity extends AppCompatActivity {
 
+    private WebView webView;
+
     private class CustomWebViewClient extends WebViewClient{
         private ProgressBar progress;
 
@@ -54,7 +56,7 @@ public class WebActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String url = intent.getStringExtra("url");
 
-        WebView webView = findViewById(R.id.webview);
+        webView = findViewById(R.id.webview);
         ProgressBar pb = findViewById(R.id.progressBar);
         webView.setWebViewClient(new CustomWebViewClient(pb));
         WebSettings webSettings = webView.getSettings();
@@ -74,5 +76,12 @@ public class WebActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.still, R.anim.slide_out);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState )
+    {
+        super.onSaveInstanceState(outState);
+        webView.saveState(outState);
     }
 }

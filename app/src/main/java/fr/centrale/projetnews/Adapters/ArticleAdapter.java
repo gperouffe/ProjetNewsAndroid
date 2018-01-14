@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import fr.centrale.projetnews.Fragments.ArticleFragment;
 import fr.centrale.projetnews.NewsApplication;
 import fr.centrale.projetnews.POJO.NewsArticle;
 import fr.centrale.projetnews.R;
+import fr.centrale.projetnews.Utils.Consts;
 
 /**
  * Created by Guillaume on 23/11/2017.
@@ -45,7 +47,7 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private int visibleThreshold = 5;
     private int lastVisibleItem, totalItemCount;
 
-    private boolean loading;
+    private boolean loading = false;
 
     public interface OnLoadMoreListener {
         void onLoadMore();
@@ -66,7 +68,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 totalItemCount = linearLayoutManager.getItemCount();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-                if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold) && lastVisibleItem > visibleThreshold) {
+                if (!loading && totalItemCount <= (lastVisibleItem + visibleThreshold) && totalItemCount > 1) {
+                    Log.d(Consts.TAG,  "trigger onloadmore");
                     loading = true;
                     recyclerView.post(new Runnable() {
                         @Override
@@ -75,7 +78,8 @@ public class ArticleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         }
                     });
                 }
-                else if (totalItemCount - 1 > (lastVisibleItem + visibleThreshold)){
+                else if (loading && totalItemCount - 1 > (lastVisibleItem + visibleThreshold)){
+                    Log.d(Consts.TAG, "remonté");
                     loading = false;
                 }
             }

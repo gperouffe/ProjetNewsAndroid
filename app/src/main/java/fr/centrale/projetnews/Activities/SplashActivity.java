@@ -63,7 +63,6 @@ public class SplashActivity extends Activity {
                 new Response.Listener() {
                     @Override
                     public void onResponse(Object o) {
-                        progressBar.setVisibility(View.INVISIBLE);
                         String json = (String)o;
                         try {
                             ResSources response = mapper.readValue(json, ResSources.class);

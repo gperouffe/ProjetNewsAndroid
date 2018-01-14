@@ -32,6 +32,8 @@ public class ArticleFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private ArticleAdapter articleAdapter;
+    private int page;
+
 
     public ArticleFragment() {
         // Required empty public constructor
@@ -44,6 +46,7 @@ public class ArticleFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
     }
 
     @Override
@@ -65,7 +68,9 @@ public class ArticleFragment extends Fragment {
 
         articleAdapter = new ArticleAdapter(articles, getContext(), rv);
         rv.setAdapter(articleAdapter);
-        ((NewsActivity)getContext()).getArticles();
+
+        if(articles.size() == 0)
+            ((NewsActivity)getContext()).getArticlesFromStart();
 
         final SwipeRefreshLayout swipeRefresh = view.findViewById(R.id.swipe_refresh);
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -100,5 +105,18 @@ public class ArticleFragment extends Fragment {
 
     public ArticleAdapter getArticleAdapter() {
         return articleAdapter;
+    }
+
+
+    public int getPage() {
+        return page;
+    }
+
+    public void nextPage() {
+        this.page++;
+    }
+
+    public void firstPage(){
+        this.page = 1;
     }
 }

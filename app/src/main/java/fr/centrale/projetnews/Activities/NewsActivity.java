@@ -9,6 +9,7 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -51,7 +52,6 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
     private ArticleFragment articleFragment;
     private SourceFragment sourceFragment;
     private String currentSourceId;
-    private int page = 1;
 
     private boolean backClicked = false;
 
@@ -80,10 +80,17 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        articleFragment = ArticleFragment.newInstance();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.articles, articleFragment)
-                .commit();
+        //Fragments
+        FragmentManager fm =  getSupportFragmentManager();
+        articleFragment = (ArticleFragment) fm.findFragmentById(R.id.articles);
+
+        if(articleFragment == null){
+            Log.d(Consts.TAG, "nouveau fragment");
+            articleFragment = ArticleFragment.newInstance();
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.articles, articleFragment)
+                    .commit();
+        }
 
         sourceFragment = SourceFragment.newInstance();
         getSupportFragmentManager().beginTransaction()
@@ -164,17 +171,17 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
 
     @Override
     public void onLoadMore() {
-        page++;
+        articleFragment.nextPage();
         this.getArticles();
     }
     public void getArticlesFromStart(){
-        page = 1;
+        articleFragment.firstPage();
         getArticles();
     }
     public void getArticles(){
 
         final ArticleAdapter adapter = articleFragment.getArticleAdapter();
-
+        int page = articleFragment.getPage();
         String url = "https://newsapi.org/v2/everything" +
                 "?apiKey=" + Consts.API_KEY +
                 "&language=" + Consts.API_LANG +
@@ -204,7 +211,6 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
                     @Override
                     public void onResponse(Object o) {
                         String json = (String)o;
-                        Log.d(Consts.TAG, json);
                         articles.remove(articles.size()-1);
                         if(adapter != null){
                             adapter.notifyItemRemoved(articles.size());
@@ -274,5 +280,14 @@ public class NewsActivity extends AppCompatActivity implements ArticleFragment.O
         setTitle(res.getString(R.string.app_name) + " - " + source.getName());
     }
 
+    @Override
+    public void onPause(){
+        if(isFinishing()) {
+            Log.d(Consts.TAG, "get rid of fragment");
+            FragmentManager fm = getSupportFragmentManager();
+            fm.beginTransaction().remove(articleFragment).commit();
+        }
+        super.onPause();
+    }
 
 }

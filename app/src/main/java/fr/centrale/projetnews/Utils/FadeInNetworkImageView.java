@@ -9,13 +9,10 @@ package fr.centrale.projetnews.Utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.*;
 import android.util.AttributeSet;
 
 import com.android.volley.toolbox.NetworkImageView;
-
-import fr.centrale.projetnews.R;
 
 public class FadeInNetworkImageView extends NetworkImageView {
 
@@ -36,7 +33,7 @@ public class FadeInNetworkImageView extends NetworkImageView {
     @Override
     public void setImageBitmap(Bitmap bm) {
         TransitionDrawable td = new TransitionDrawable(new Drawable[]{
-                new BitmapDrawable(getContext().getResources(), BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_book_24dp)),
+                new ColorDrawable(getContext().getColor(android.R.color.transparent)),
                 new BitmapDrawable(getContext().getResources(), bm)
         });
 
